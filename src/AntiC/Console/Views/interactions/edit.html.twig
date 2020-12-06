@@ -1,0 +1,216 @@
+{% extends "base/authenticated.base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block title %}
+Edit - {{ interaction.name }}
+{% endblock title %}
+
+{% block pageStylesheets %}
+    <link href="/css/global.css" rel="stylesheet">
+    <link href="/css/interactions.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block interactionsActive %}
+class="active"
+{% endblock interactionsActive %}
+
+
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Edit - {{ interaction.name }}</h1>
+
+        {% if app.session.flashbag.has('success') %}
+            {% for flashMessage in app.session.flashbag.get('success') %}
+                <div class="alert alert-success">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if app.session.flashbag.has('failure') %}
+            {% for flashMessage in app.session.flashbag.get('failure') %}
+                <div class="alert alert-danger">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form role="form" action="{{ path('console.interactions.edit', {'ID':interaction.name}) }}" method="post">
+            <div class="col-sm-2 well" data-spy="affix">
+                <div class="form-group">
+                    <label for="common-name">Enzyme Name</label>
+                    <input name="name" class="form-control" placeholder="e.g. CYP 450 1A2" id="enzyme-name" value="{{ interaction.name }}" required="true" type="text">
+                    <input type="hidden" name="orig_name" value="{{ interaction.name }}">
+                </div>
+                <div class="form-group">
+                    <label>Last Edited By</label>
+                    <div><em>{{ who_updated }}</em></div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="saveInteraction" method="post">Save</button>
+                </div>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="substrate-header" data-parent="#accordion" href="#collapseOne">
+                            <h4 class="panel-title">
+                                Substrate
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            {% if interaction.Substrate is empty %}
+                                <div class="row" style="margin-bottom:5px;">
+                                    <div class="col-sm-5">
+                                        <input class="form-control" placeholder="e.g. Acetaminophen" name="substrate[0][name]" id="substrate" type="text">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="substrate[0][risk]" id="risk-level">
+                                            <option></option>
+                                            <option>Weak</option>
+                                            <option>Moderate</option>
+                                            <option>Strong</option>
+                                            <option>Unknown</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for substrate in interaction.Substrate %}
+                                    <div class="row" style="margin-bottom:5px;">
+                                        <div class="col-sm-5">
+                                            <input class="form-control" placeholder="e.g. Acetaminophen" name="substrate[{{ loop.index0 }}][name]" value="{{ substrate.compound }}" id="substrate" type="text">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select class="form-control" name="substrate[{{ loop.index0 }}][risk]" id="risk-level">
+                                                <option></option>
+                                                <option {% if substrate.severity == "Weak" %}selected="selected"{% endif %}>Weak</option>
+                                                <option {% if substrate.severity == "Moderate" %}selected="selected"{% endif %}>Moderate</option>
+                                                <option {% if substrate.severity == "Strong" %}selected="selected"{% endif %}>Strong</option>
+                                                <option {% if substrate.severity == "Unknown" %}selected="selected"{% endif %}>Unknown</option>
+                                            </select>
+                                        </div>
+                                        {% if not loop.first %}
+                                            <div class="col-sm-3">
+                                                <button class="btn btn-danger btn-xs remove-input" id="removeSubstrate[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                    <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <button type="button" class="btn btn-success btn-xs addMore" id="addMoreSubstrate"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>        
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="inhibitor-header" data-parent="#accordion" href="#collapseTwo">
+                            <h4 class="panel-title">
+                                Inhibitor
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            {% if interaction.Inhibitor is empty %}
+                                <div class="row" style="margin-bottom:5px;">
+                                    <div class="col-sm-5">
+                                        <input class="form-control" placeholder="e.g. Amiodarone" name="inhibitor[0][name]" id="inhibitor" type="text">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="inhibitor[0][risk]" id="risk-level">
+                                            <option></option>
+                                            <option>Weak</option>
+                                            <option>Moderate</option>
+                                            <option>Strong</option>
+                                            <option>Unknown</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for inhibitor in interaction.Inhibitor %}
+                                    <div class="row" style="margin-bottom:5px;">
+                                        <div class="col-sm-5">
+                                            <input class="form-control" placeholder="e.g. Amiodarone" name="inhibitor[{{ loop.index0 }}][name]" value="{{ inhibitor.compound }}" id="inhibitor" type="text">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select class="form-control" name="inhibitor[{{ loop.index0 }}][risk]" id="risk-level">
+                                                <option></option>
+                                                <option {% if inhibitor.severity == "Weak" %}selected="selected"{% endif %}>Weak</option>
+                                                <option {% if inhibitor.severity == "Moderate" %}selected="selected"{% endif %}>Moderate</option>
+                                                <option {% if inhibitor.severity == "Strong" %}selected="selected"{% endif %}>Strong</option>
+                                                <option {% if inhibitor.severity == "Unknown" %}selected="selected"{% endif %}>Unknown</option>
+                                            </select>
+                                        </div>
+                                        {% if not loop.first %}
+                                            <div class="col-sm-3">
+                                                <button class="btn btn-danger btn-xs remove-input" id="removeInhibitor[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                    <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <button type="button" class="btn btn-success btn-xs addMore" id="addMoreInhibitor"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="inducer-header" data-parent="#accordion" href="#collapseThree">
+                            <h4 class="panel-title">
+                                Inducer
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            {% if interaction.Inducer is empty %}
+                                <div class="row" style="margin-bottom:5px;">
+                                    <div class="col-sm-5">
+                                        <input class="form-control" placeholder="e.g. Aminogluthethimide" name="inducer[0][name]" id="inducer" type="text">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="inducer[0][risk]" id="risk-level">
+                                            <option></option>
+                                            <option>Weak</option>
+                                            <option>Moderate</option>
+                                            <option>Strong</option>
+                                            <option>Unknown</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for inducer in interaction.Inducer %}
+                                    <div class="row" style="margin-bottom:5px;">
+                                        <div class="col-sm-5">
+                                            <input class="form-control" placeholder="e.g. Aminogluthethimide" name="inducer[{{ loop.index0 }}][name]" value="{{ inducer.compound }}" id="inducer" type="text">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select class="form-control" name="inducer[{{ loop.index0 }}][risk]" id="risk-level">
+                                                <option></option>
+                                                <option {% if inducer.severity == "Weak" %}selected="selected"{% endif %}>Weak</option>
+                                                <option {% if inducer.severity == "Moderate" %}selected="selected"{% endif %}>Moderate</option>
+                                                <option {% if inducer.severity == "Strong" %}selected="selected"{% endif %}>Strong</option>
+                                                <option {% if inducer.severity == "Unknown" %}selected="selected"{% endif %}>Unknown</option>
+                                            </select>
+                                        </div>
+                                        {% if not loop.first %}
+                                            <div class="col-sm-3">
+                                                <button class="btn btn-danger btn-xs remove-input" id="removeInducer[{{ loop.index }}]" onclick="removeRow(this);" type="button">
+                                                    <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <button type="button" class="btn btn-success btn-xs addMore" id="addMoreInducer"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

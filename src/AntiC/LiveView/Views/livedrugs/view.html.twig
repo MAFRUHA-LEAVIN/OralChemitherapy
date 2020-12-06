@@ -1,0 +1,310 @@
+{% extends "base/base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block pageTitle %}
+Oral Chemotherapy - University of Alberta | Improving drug dosing and use
+{% endblock pageTitle %}
+
+{% block pageStylesheets %}
+<link href="/css/live_global.css" rel="stylesheet">
+<link href="/css/live_drugs.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block drugsActive %}
+class="active"
+{% endblock drugsActive %}
+
+{% block content %}
+<div>
+    <h1 class="page-header">View - {{ drug.g_name }}</h1>
+    <table class="table table-striped">
+        <tbody>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Common Name: </h4>
+                    </div>
+                    <div id="g_name" name="g_name" class="col-md-4 table-item">
+                        {{ drug.g_name }}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Trade Name: </h4>
+                    </div>
+                    <div id="t_name" name="t_name" class="col-md-4 table-item">
+                        {{ drug.t_name }}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Risk: </h4>
+                    </div>
+                    <div id="risk" name="risk" class="col-md-4 table-item">
+                        {{ drug.risk }}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Classification: </h4>
+                    </div>
+                    <div id="classification" name="classification" class="col-md-4 table-item">
+                        <table class="table table-bordered">
+                            <tbody>
+                                {% for classification in drug.classification %}            
+                                <tr><td>{{ classification }}</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Contraindications: </h4>
+                    </div>
+                    <div id="contraindications" name="contraindications" class="col-md-4 table-item">
+                        <table class="table table-bordered">
+                            <tbody>
+                                {% for contraindication in drug.contraindications %}            
+                                <tr><td>{{ contraindication }}</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Oncology Uses: </h4>
+                    </div>
+                    <div id="oncUse" name="oncUse" class="col-md-4 table-item">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td><strong>Use</strong></td>
+                                    <td><strong>Approved</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for oncUse in drug.oncUses %}
+                                <tr>
+                                    <td>{{oncUse.cancer_type}}</td>
+                                    <td>{% if oncUse.approved %}Yes{% else %}No{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Precautions: </h4>
+                    </div>
+                    <div id="precautions" name="precautions" class="col-md-4 table-item">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td><strong>Label</strong></td>
+                                    <td><strong>Precaution</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for precaution in drug.precautions %}
+                                <tr>
+                                    <td>{{precaution.name}}</td>
+                                    <td>{{precaution.note}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Breastfeeding: </h4>
+                    </div>
+                    <div name="breastfeeding" id="breastfeeding" class="col-md-4 table-item">
+                        {{drug.breastfeeding}}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Fertility: </h4>
+                    </div>
+                    <div name="fertility" id="fertility" class="col-md-4 table-item">
+                        {{drug.fertility}}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Metabolism: </h4>
+                    </div>
+                    <div name="metabolism" id="metabolism" class="col-md-4 table-item">
+                        {{drug.metabolism}}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Usual Oral Dose: </h4>
+                    </div>
+                    <div name="uo_dose" id="uo_dose" class="col-md-4 table-item">
+                        {{drug.uo_dose}}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Pregnancy: </h4>
+                    </div>
+                    <div name="pregnancy" id="pregnancy" class="col-md-4 table-item">
+                        {{drug.pregnancy}}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Excretion: </h4>
+                    </div>
+                    <div name="excretion" id="excretion" class="col-md-4 table-item">
+                        {{drug.excretion}}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Available: </h4>
+                    </div>
+                    <div name="available" id="available" class="col-md-4 table-item">
+                        {{drug.available}}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Administration: </h4>
+                    </div>
+                    <div name="administration" id="administration" class="col-md-4 table-item">
+                                {% for admin in drug.administration %}            
+                                {{ admin }}<br/>
+                                {% endfor %}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Monitoring: </h4>
+                    </div>
+                    <div name="monitoring" id="monitoring" class="col-md-4 table-item">
+                        <table class="table table-bordered">
+                            <tbody>
+                                {% for monitor in drug.monitoring %}            
+                                <tr><td>{{ monitor }}</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Side Effect Frequency: </h4>
+                    </div>
+                    <div name="frequency" id="frequency" class="col-md-4 table-item">
+                        {{drug.frequency}}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Side Effects: </h4>
+                    </div>
+                    <div name="sideEffect" id="sideEffect" class="col-md-4 table-item">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td><strong>Effect</strong></td>
+                                    <td><strong>Severe</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sideEffect in drug.sideEffects %}
+                                <tr>
+                                    <td>{{sideEffect.name}}</td>
+                                    <td>{% if sideEffect.severe %}Yes{% else %}No{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Interactions: </h4>
+                    </div>
+                    <div name="drugInteracts" id="drugInteracts" class="col-md-8 table-item">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td><strong>Interaction</strong></td>
+                                    <td><strong>Compound</strong></td>
+                                    <td><strong>Enzyme Effect</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for interaction in drug.drugInteracts %}
+                                <tr>
+                                    <td>{{interaction.interaction}}</td>
+                                    <td>{{interaction.compound}}</td>
+                                    <td>{% if interaction.enzyme_effect_type is defined %}{{interaction.enzyme_effect_type}}{% else %}-{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Anti-Neoplastic: </h4>
+                    </div>
+                    <div name="anti-neoplastic" id="anti-neoplastic" class="col-md-4 table-item">
+                        {% if drug.anti_neoplastic %}Yes{% else %}No{% endif %}
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div class="col-md-2">
+                        <h4>Dose Adjustments: </h4>
+                    </div>
+                    <div name="doseAdjust" id="doseAdjust" class="col-md-6 table-item">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td><strong>Name</strong></td>
+                                    <td><strong>Adjustment</strong></td>
+                                    <td><strong>Adjustment Chart</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for doseAdjust in drug.doseAdjusts %}
+                                <tr>
+                                    <td>{{doseAdjust.problem}}</td>
+                                    <td>{{doseAdjust.note}}</td>
+                                    <td>{% if doseAdjust.chart != "" %}<a href="/{{doseAdjust.chart}}">Click to view chart</a> {% else %}-{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
+{% block pageScripts %}
+<script>
+    function addLineBreaks(divId)
+    {
+        var text = $("#" + divId).html().replace(/[|]/g, "<br />");
+        $("#" + divId).html(text);
+    }
+    addLineBreaks("uo_dose");
+    //addLineBreaks("administration");
+
+    //Hyperlink NCI Common Toxicity Criteria
+    var text = $("#monitoring").html().replace(/NCI Common Toxicity Criteria/g,
+            "<a href=\"http://www.acrin.org/Portals/0/Administration/Regulatory/CTCAE_4.02_2009-09-15_QuickReference_5x7.pdf\">NCI Common Toxicity Criteria</a>")
+    $("#monitoring").html(text);
+
+</script>
+{% endblock pageScripts %}

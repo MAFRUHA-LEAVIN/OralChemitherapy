@@ -1,0 +1,200 @@
+{% extends "base/base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block pageTitle %}
+Oral Chemotherapy - University of Alberta | Improving drug dosing and use
+{% endblock pageTitle %}
+
+{% block pageStylesheets %}
+<link href="/css/live_global.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block aboutActive %}
+class="active"
+{% endblock aboutActive %}
+
+{% block content %}
+<!-- Body Content -->
+<h1 class="page-header">About</h1>
+<div>
+    <h3>Disclaimer</h3>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;The contents of the AntiC App are intended to assist non-oncology pharmacists &
+        allied health-care professionals to identify problems associated with oral chemotherapy. While there is public access,
+        it must be understood that the information is not intended as medical advice, which should be provided by a clinician,
+        with the health information, necessary to identify the individual’s requirements. The information provided on the AntiC
+        App is intended primarily for use in Canada, and may not apply to other jurisdictions. The authors disclaim any liability,
+        loss, injury or damage incurred as a consequence, directly or indirectly, by the use and or application of any of the
+        contents of the AntiC App.</p>
+</div>
+<div>
+    <h3>Glossary</h3>
+    <table class="table table-striped table-bordered">
+        <tbody>
+            <tr>
+                <td><strong>Abortifacient</strong></td>
+                <td>Any agent which may produce abortion.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Cancer</strong></td>
+                <td>A broad group of diseases involving unregulated cell growth. In cancer, cells divide and grow uncontrollably, forming malignant tumours, and invading nearby parts of the body.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Carcinogenic</strong></td>
+                <td>Having the potential to cause cancer.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Chemotherapeautics</strong></td>
+                <td>The treatment of cancer using specific chemical agents or drugs that are selectively destructive to malignant cells and tissues.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Chemotherapy</strong></td>
+                <td>The treatment of cancer with one or more cytotoxic anti-neoplastic drugs as part of a standardized regimen.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Clastogenic</strong></td>
+                <td>Having the potential to cause disruption or breakage of chromosomes.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Cytotoxic</strong></td>
+                <td>Detrimental or destructive to cells.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Dose</strong></td>
+                <td>A specified quantity of a therapeutic agent, such as a drug or medicine, prescribed to be taken at one time or at stated intervals.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Embryo-lethal</strong></td>
+                <td>Having the potential to cause death of the embryo.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Embryotoxic</strong></td>
+                <td>Causing injury to the embryo, which may result in death or abnormal development of a part due to entering the placental circulation.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Fetotoxic</strong></td>
+                <td>A substance poisonous to the fetus.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Half-life</strong></td>
+                <td>The time required for half the quantity of a drug or other substance deposited in a living organism to be metabolised or eliminated by normal biological processes.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Inducer</strong></td>
+                <td>A substance that induces, especially a substance that is capable of activating transcription from specific genes within a cell.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Infarction</strong></td>
+                <td>Tissue death (necrosis) caused by a local lack of oxygen, due to an obstruction of the tissue's blood supply.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Inhibitor</strong></td>
+                <td>A substance that reduces or suppresses the activity of another substance (such as an enzyme).</td>
+            </tr>
+
+            <tr>
+                <td><strong>Leukemia</strong></td>
+                <td>Cancer of the blood or bone marrow characterized by an abnormal increase of immature white blood cells called "blasts".</td>
+            </tr>
+
+            <tr>
+                <td><strong>Malignant</strong></td>
+                <td>Very virulent or infectious.</td>
+
+            </tr>
+            <tr>
+                <td><strong>Medical protocol</strong></td>
+                <td>Medical guidelines for a medical treatment. It usually includes a treatment plan, summarized consensus statements and addresses practical issues.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Metastasis</strong></td>
+                <td>The spread of a cancer from one organ or part to another non-adjacent organ or part.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Mutagenic</strong></td>
+                <td>A substance which may cause mutation.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Oncology</strong></td>
+                <td>The study and treatment of tumours.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Radiation therapy</strong></td>
+                <td>The medical use of ionizing radiation, generally as part of cancer treatment to control or kill malignant cells.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Risk stratification</strong></td>
+                <td>A statistical process to determine detectable characteristics associated with an increased chance of experiencing unwanted outcomes.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Substrate</strong></td>
+                <td>The reactant which is consumed during a catalytic or enzymatic reaction.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Teratogenic</strong></td>
+                <td>Having the potential to cause congenital abnormalities or birth tdects.</td>
+            </tr>
+
+            <tr>
+                <td><strong>Toxicity</strong></td>
+                <td>The degree to which a substance can damage an organism.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <h3>The Team</h3>
+    <b>Project Conception and Medical Consultants:</b>
+    <ul>
+        <li><b>Tibor van Rooij</b>, Ph.D. Candidate, Pharmacy and Pharmaceutical Sciences, University of Alberta</li>
+        <li><b>Serena Rix</b>, Pharm.D., Grey Nuns Community Hospital, Edmonton, Alberta</li>
+        <li><b>Sharon Marsh</b>, Ph.D., Assistant Professor, Pharmacy and Pharmaceutical Sciences, University of Alberta</li>
+    </ul>
+    <b>Development Team:</b>
+    <ul>
+        <li><b>James Cadek</b> - University of Alberta</li>
+        <li><b>Zachary Lubinski</b> - University of Alberta</li>
+        <li><b>James Moore</b> - University of Alberta</li>
+        <li><b>Kyle Ross</b> - University of Alberta</li>
+        <li><b>Tanvir Sajed</b> - University of Alberta</li>
+        <li><b>Jeremy Smereka</b> - University of Alberta</li>
+        <li><b>Scott Vig</b> - University of Alberta</li>
+    </ul>
+</div>
+<div>
+    <h3>Resources</h3>
+    <ul>
+        <li><a href="http://oralchemotherapy.ca/wordpress/">Oral Chemotherapy Website</a></li>
+        <li><a href="http://www.bccancer.bc.ca/HPI/DrugDatabase/DrugIndexPro/default.htm">BC Cancer Agency Website</a></li>
+        <li><a href="https://www.cancercare.on.ca/cms/One.aspx">Cancer Care Ontario Website</a></li>	
+        <li><a href="http://www.acrin.org/Portals/0/Administration/Regulatory/CTCAE_4.02_2009-09-15_QuickReference_5x7.pdf">NCI Common Toxicity Criteria (Version 4, 2009)</a></li>
+        <li><a href="http://www.sads.org.uk/drugs_to_avoid.htm">QTc Interval Prolonging Agents</a></li>
+        <li><a href="http://www.mhc.com//Cytochromes//PGP//PgpTable.HTML">P-glycoprotein Drug Interactions</a></li>
+    </ul>
+</div>
+<div>
+    <h3>Version</h3>
+    <p>Version 1.0</p>
+</div>
+{% endblock content %}

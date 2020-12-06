@@ -1,0 +1,18 @@
+/**
+ * Styles for Pages: /console/interactions
+ *                   /console/interactions/add
+ *                   /console/interactions/NAMEOFDRUG
+ *
+ * Provides page specific styles for 
+ * console interactions page and specific interactions pages
+ **/
+
+/* Global Styles to both pages */
+
+
+/* Styles for Console page */
+.add-interaction-button {
+    margin-right:16px;
+}
+
+/* Styles for Interactions Add/Edit page */

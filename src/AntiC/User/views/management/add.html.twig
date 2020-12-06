@@ -1,0 +1,67 @@
+{% extends "base/authenticated.base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block title %}
+Add User
+{% endblock title %}
+
+{% block pageStylesheets %}
+<link href="/css/global.css" rel="stylesheet">
+<link href="/css/users.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block usersActive %}
+class="active"
+{% endblock usersActive %}
+
+
+{% block content %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h1 class="page-header">Add User</h1>
+    {% if errors %}
+        <div class="alert alert-danger form-error">
+            {% for error in errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form role="form" action="{{ path('user.add') }}" method="post">
+        <div class="col-sm-9">
+            <div class="form-group">
+                <label for="user-name">Name</label>
+                <input type="text" class="form-control" name="userName" id="user-name" placeholder="John Doe" style="max-width:300px;" value="{{ user.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email-address">Email Address</label>
+                <input type="email" class="form-control" name="email" id="email-address" placeholder="e.g. johndoe@antic.ca" style="max-width:300px;" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">Password</label>
+                <input type="password" class="form-control" name="password" id="newPassword" placeholder="Password" style="max-width:300px;" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" style="max-width:300px;" required>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <ul class="list-unstyled">
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" id="role-user" name="role" value="ROLE_USER" disabled checked> ROLE_USER - Base user account.
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" id="role-admin" name="role" value="ROLE_ADMIN" {% if user.hasRole('ROLE_ADMIN') %}checked="checked"{% endif %}> ROLE_ADMIN - Allowed to manage users.
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <button type="submit" id="addUser" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

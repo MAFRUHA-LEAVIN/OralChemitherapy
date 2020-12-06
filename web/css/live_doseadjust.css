@@ -1,0 +1,14 @@
+/**
+ * Styles for Pages: /console
+ *                   /console/drugs/add
+ *                   /console/drugs/NAMEOFDRUG
+ *
+ * Provides page specific styles for 
+ * console page and specific drugs page
+ **/
+
+/* Global Styles to both pages */
+
+.table-item{
+    padding-top: 10px;
+}

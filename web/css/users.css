@@ -1,0 +1,21 @@
+/**
+ * Styles for Pages: /console/users
+ *                   /console/users/add
+ *                   /console/users/NAMEOFUSER
+ *
+ * Provides page specific styles for 
+ * console users page and specific users pages
+ **/
+
+/* Global Styles to both pages */
+
+
+/* Styles for Console page */
+.add-users-button {
+    margin-right:16px;
+}
+.btnDisableUser {
+    min-width:60px;
+}
+
+/* Styles for Users Add/Edit page */

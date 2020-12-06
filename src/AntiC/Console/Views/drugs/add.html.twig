@@ -1,0 +1,344 @@
+{% extends "base/authenticated.base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block title %}
+Add Drug
+{% endblock title %}
+
+{% block pageStylesheets %}
+    <link href="/css/global.css" rel="stylesheet">
+    <link href="/css/drugs.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block drugsActive %}
+class="active"
+{% endblock drugsActive %}
+
+
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Add Drug</h1>
+
+        {% if app.session.flashbag.has('success') %}
+            {% for flashMessage in app.session.flashbag.get('success') %}
+                <div class="alert alert-success">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if app.session.flashbag.has('failure') %}
+            {% for flashMessage in app.session.flashbag.get('failure') %}
+                <div class="alert alert-danger">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form role="form" method="post" action="{{ path('console.drug.add') }}" enctype="multipart/form-data">
+           {# Todo: Figure out Sidebar Floating #}
+            <div class="col-sm-2 well" data-spy="affix">
+                <div class="form-group">
+                    <label for="common-name">Common Name</label>
+                    <input name="g_name" class="form-control" placeholder="e.g. Abiaterone" id="common-name" required="true" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="trade-name">Trade Name</label>
+                    <input name="t_name" class="form-control" placeholder="e.g. Zytiga" id="trade-name" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="risk-level">Risk</label>
+                    <select name="risk" class="form-control" id="risk-level" required>
+                        <option></option>
+                        <option>Low</option>
+                        <option>Moderate</option>
+                        <option>High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="last-revision">Last Revision</label>
+                    <input name="last_revision" class="form-control" placeholder="2013-11-29" id="last-revision" type="text" required="true">
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="saveDrug" class="btn btn-primary" method="post">Save Drug</button>
+                </div>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="general-header" data-parent="#accordion" href="#collapseOne">
+                            <h4 class="panel-title">
+                                General
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="classification">
+                                    <label>Classification</label>
+                                    <div class="row rowBottomHalfBreak">
+                                        <div class="col-sm-10">
+                                            <input name="classification[0]" class="form-control" placeholder="e.g. Xeloda" id="classification" type="text">
+                                        </div>
+                                    </div>
+                                    <button id="addMoreClassification" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="contraindications">
+                                    <label>Contraindications</label>
+                                    <div class="row rowBottomHalfBreak">
+                                        <div class="col-sm-10">
+                                            <input name="contraindications[0]" class="form-control" placeholder="e.g. Hypersensitivity" id="contraindications" type="text">
+                                        </div>
+                                    </div>
+                                    <button id="addMoreContraindications" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="onocologyuses">
+                                    <label>Oncology Uses</label>
+                                    <div class="row rowBottomHalfBreak">
+                                        <div class="col-sm-8">
+                                            <input name="oncology[0][type]" class="form-control" placeholder="e.g. Prostate Cancer" id="oncology" type="text">
+                                        </div>
+                                        <div class="col-sm-1 checkbox">
+                                            <label><input name="oncology[0][approved]" type="checkbox" id="approved" value="approved"> Approved</label>
+                                        </div>
+                                    </div>
+                                    <button id="addMoreOncology" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="precautions">
+                                    <label>Precautions</label>
+                                    <div class="row rowBottomHalfBreak">
+                                        <div class="col-xs-3">
+                                            <input name="precaution[0][label]" class="form-control" placeholder="Label" id="precaution-label" type="text">
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input name="precaution[0][note]" class="form-control" placeholder="Precaution" id="precaution-precaution" type="text">
+                                        </div>
+                                    </div>
+                                    <button id="addMorePrecautions" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="breastfeeding">
+                                    <label for="breastfeeding">Breastfeeding</label>
+                                    <input name="breastfeeding" class="form-control" placeholder="e.g. Not Recommended" id="breastfeeding" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="fertility">
+                                    <label for="fertility">Fertility</label>
+                                    <input name="fertility" class="form-control" placeholder="e.g. Not Recommended" id="fertility" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="metabolism">
+                                    <label for="metabolism">Metabolism</label>
+                                    <input name="metabolism" class="form-control" placeholder="e.g. Hepatic" id="metabolism" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="oraldose">
+                                    <label for="oraldose">Usual Oral Dose</label>
+                                    <input name="uo_dose" class="form-control" placeholder="e.g. 200-400 mg/day" id="oraldose" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pregnancy">
+                                    <label for="pregnancy">Pregnancy</label>
+                                    <input name="pregnancy" class="form-control" placeholder="e.g. Category : X" id="available" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="excretion">
+                                    <label for="excretion">Excretion</label>
+                                    <input name="excretion" class="form-control" placeholder="e.g. Renal/Fecal" id="excretion" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="available">
+                                    <label for="available">Available</label>
+                                    <input name="available" class="form-control" placeholder="e.g. Tablets: 2.5, 5, 10" id="available" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="administration">
+                                    <label for="administration">Administration</label>
+                                    <div class="row rowBottomHalfBreak">
+                                        <div class="col-sm-10">
+                                            <input name="administration[0]" class="form-control" placeholder="e.g. Oral with food" id="administration" type="text">
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-success btn-xs addMore" id="addMoreAdministration"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="monitoring">
+                                    <label for="monitoring">Monitoring</label>
+                                    <div class="row rowBottomHalfBreak">
+                                        <div class="col-sm-10">
+                                            <input name="monitoring[0]" class="form-control" placeholder="e.g. Disease progression and toxicities " id="monitoring" type="text">
+                                        </div>
+                                    </div>
+                                    <button id="addMoreMonitoring" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="sideeffect-header" data-parent="#accordion" href="#collapseTwo">
+                            <h4 class="panel-title">
+                                Side Effects
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="frequency">
+                                    <label for="frequency">Frequency</label>
+                                    <input name="sideeffect_frequency" class="form-control" placeholder="e.g. Clinically significant" id="frequency" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="effects">
+                                    <label>Side Effects</label>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <input name="sideeffect[0][name]"class="form-control" placeholder="e.g. Hypertension" type="text">
+                                        </div>
+                                        <div class="col-sm-2 checkbox">
+                                            <label><input name="sideeffect[0][severe]" type="checkbox" id="important" value="important"> Important</label>
+                                        </div>
+                                    </div>
+                                    <button id="addMoreSideeffect" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="interaction-header" data-parent="#accordion" href="#collapseThree">
+                            <h4 class="panel-title">
+                                Drug Interactions
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label>Interaction</label>
+                                <div class="row rowBottomHalfBreak toClone">
+                                    <div class="row rowBottomHalfBreak col-sm-12">
+                                        <div class="col-sm-4">
+                                            <select name="interact[0][type]" class="form-control col-sm-3" style="font-weight:bold;">
+                                                <option></option>
+                                                <option value="Avoid concomitant use">Avoid concomitant use</option>
+                                                <option value="Increases effect of drug">&uarr; Effect (this drug)</option>
+                                                <option value="Decreases effect of drug">&darr; Effect (this drug)</option>
+                                                <option value="Increases/Decreases effect of drug">&uarr;&darr; Effect (this drug)</option>
+                                                <option value="Decreases effect of">&uarr; Effect</option>
+                                                <option value="Increases effect of">&darr; Effect</option>
+                                                <option value="Increases/Decreases effect of">&uarr;&darr; Effect</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row rowBottomHalfBreak col-sm-12">
+                                        <div class="col-sm-4">
+                                            <input name="interact[0][name]" class="form-control" placeholder="e.g. Avoid estrogen" type="text">
+                                        </div>
+                                        <div class="text-center or-text col-sm-1">
+                                            <strong>OR</strong>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select name="interact[0][enzyme]" class="form-control">
+                                                <option></option>
+                                                {% for enzyme in enzymes %}
+                                                    <option>{{ enzyme.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select name="interact[0][enzymetype]" class="form-control">
+                                                <option></option>
+                                                <option>Inhibitor</option>
+                                                <option>Inducer</option>
+                                                <option>Substrate</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="addMoreInteractions" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                            </div>
+                            <div class="form-group">
+                                <label>QT-Prolonging Agents</label>
+                                <div class="row rowBottomHalfBreak">
+                                    <div class="col-sm-4">
+                                        <select name="interactQT[0][type]" class="form-control col-sm-3" style="font-weight:bold;">
+                                            <option></option>
+                                            <option value="Avoid concomitant use">Avoid concomitant use</option>
+                                            <option value="Increases effect of drug">&uarr; Effect (this drug)</option>
+                                            <option value="Decreases effect of drug">&darr; Effect (this drug)</option>
+                                            <option value="Increases/Decreases effect of drug">&uarr;&darr; Effect (this drug)</option>
+                                            <option value="Decreases effect of">&uarr; Effect</option>
+                                            <option value="Increases effect of">&darr; Effect</option>
+                                            <option value="Increases/Decreases effect of">&uarr;&darr; Effect</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button id="addMoreQTProlonging" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                            </div>
+                            <div class="form-group">
+                                <label><input name="anti-neoplastic" type="checkbox" id="cautionwith" value="cautionwith"> Caution with other anti-neoplastic agents (unless per protocol)</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Other Effects</label>
+                                <div class="row rowBottomHalfBreak">
+                                    <div class="col-sm-10">
+                                        <input name="interact_other[0]" class="form-control" placeholder="e.g. Caution with agents" id="othereffects" type="text">
+                                    </div>
+                                </div>
+                                <button id="addMoreOtherInteractions" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="dose-header" data-parent="#accordion" href="#collapseFour">
+                            <h4 class="panel-title">
+                                Dose Adjustments
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="row rowBottomBreak">
+                                    <div class="col-sm-2">
+                                        <label for="adjustmentname">Name</label>
+                                        <input name="adjustment[0][name]" type="text" class="form-control" id="adjustmentname" placeholder="Name">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="adjustmentdesc">Adjustment</label>
+                                        <textarea name="adjustment[0][adjustment]" class="form-control" rows="3" id="adjustmentdesc"></textarea>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="chartimage">Adjustment Chart</label>
+                                        <input name="adjustment[0][chart]" type="file" id="chartimage">
+                                    </div>
+                                </div>
+                                <button id="addMoreAdjustments" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

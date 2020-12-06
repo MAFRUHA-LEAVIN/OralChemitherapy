@@ -1,0 +1,577 @@
+{% extends "base/authenticated.base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block title %}
+Edit - {{ drug.g_name }}
+{% endblock title %}
+
+{% block pageStylesheets %}
+    <link href="/css/global.css" rel="stylesheet">
+    <link href="/css/drugs.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block drugsActive %}
+class="active"
+{% endblock drugsActive %}
+
+
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Edit Drug - {{ drug.g_name }}</h1>
+
+        {% if app.session.flashbag.has('success') %}
+            {% for flashMessage in app.session.flashbag.get('success') %}
+                <div class="alert alert-success">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if app.session.flashbag.has('failure') %}
+            {% for flashMessage in app.session.flashbag.get('failure') %}
+                <div class="alert alert-danger">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form role="form" method="post" action="{{ path('console.drug.edit', { 'ID':drug.g_name }) }}">
+            <div class="col-sm-2 well" data-spy="affix">
+                <div class="form-group">
+                    <label for="common-name">Common Name</label>
+                    <input name="g_name" class="form-control" placeholder="e.g. Abiaterone" id="common-name" value="{{ drug.g_name }}" required="true" type="text">
+                    <input type="hidden" name="g_name_original" value="{{ drug.g_name }}">
+                </div>
+                <div class="form-group">
+                    <label for="trade-name">Trade Name</label>
+                    <input name="t_name" class="form-control" placeholder="e.g. Zytiga" id="trade-name" value="{{ drug.t_name }}" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="risk-level">Risk</label>
+                    <select name="risk" class="form-control" id="risk-level" required>
+                        <option></option>
+                        <option {% if drug.risk == "Low" %}selected="selected"{% endif %}>Low</option>
+                        <option {% if drug.risk == "Moderate" %}selected="selected"{% endif %}>Moderate</option>
+                        <option {% if drug.risk == "High" %}selected="selected"{% endif %}>High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="last-revision">Last Revision</label>
+                    <input name="last_revision" class="form-control" placeholder="2013-11-29" id="last-revision" value="{{ drug.last_revision }}" type="text" required="true">
+                </div>
+                <div class="form-group">
+                    <label>Last Edited</label>
+                    <div><em>{{ drug.last_updated }}</em></div>
+                </div>
+                <div class="form-group">
+                    <label>Last Edited By</label>
+                    <div><em>{{ last_edited_by }}</em></div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="saveDrug" class="btn btn-primary" method="post">Save Drug</button>
+                </div>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="general-header" data-parent="#accordion" href="#collapseOne">
+                            <h4 class="panel-title">
+                                General
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="classification">
+                                    <label>Classification</label>
+                                    {% if drug.classification is empty %}
+                                        <div class="row rowBottomHalfBreak">
+                                            <div class="col-sm-10">
+                                                <input name="classification[0]" class="form-control" placeholder="e.g. Xeloda" id="classification" type="text">
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {% for classification in drug.classification %}            
+                                            <div class="row rowBottomHalfBreak">
+                                                <div class="col-sm-10">
+                                                    <input name="classification[{{ loop.index0 }}]" class="form-control" placeholder="e.g. Xeloda" id="classification" value="{{ classification }}" type="text">
+                                                </div>
+                                                {% if not loop.first %}
+                                                    <div class="col-sm-1">
+                                                        <button class="btn btn-danger btn-xs remove-input" id="removeClassification[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                            <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-xs addMore" id="addMoreClassification"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="contraindications">
+                                    <label>Contraindications</label>
+                                    {% if drug.contraindications is empty %}
+                                        <div class="row rowBottomHalfBreak">
+                                            <div class="col-sm-10">
+                                                <input name="contraindications[0]" class="form-control" placeholder="e.g. Hypersensitivity" id="contraindications" type="text">
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {% for contraindications in drug.contraindications %}
+                                            <div class="row rowBottomHalfBreak">
+                                                <div class="col-sm-10">
+                                                    <input name="contraindications[{{ loop.index0 }}]" class="form-control" placeholder="e.g. Hypersensitivity" id="contraindications" value="{{ contraindications }}" type="text">
+                                                </div>
+                                                {% if not loop.first %}
+                                                    <div class="col-sm-1">
+                                                        <button class="btn btn-danger btn-xs remove-input" id="removeContraindications[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                            <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-xs addMore" id="addMoreContraindications"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="onocologyuses">
+                                    <label>Oncology Uses</label>
+                                    {% if drug.oncUses is empty %}
+                                        <div class="row rowBottomHalfBreak">
+                                            <div class="col-sm-8">
+                                                <input name="oncology[0][type]" class="form-control" placeholder="e.g. Prostate Cancer" id="oncology" type="text">
+                                            </div>
+                                            <div class="col-sm-1 checkbox">
+                                                <label><input name="oncology[0][approved]" type="checkbox" id="approved" value="approved"> Approved</label>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {% for oncUse in drug.oncUses %}
+                                            <div class="row rowBottomHalfBreak">
+                                                <div class="col-sm-8">
+                                                    <input name="oncology[{{ loop.index0 }}][type]" class="form-control" placeholder="e.g. Prostate Cancer" value="{{ oncUse.cancer_type }}" id="oncology" type="text">
+                                                </div>
+                                                <div class="col-sm-1 checkbox">
+                                                    <label><input name="oncology[{{ loop.index0 }}][approved]" type="checkbox" id="approved" value="approved" {% if oncUse.approved %}checked="checked"{% endif %}> Approved</label>
+                                                </div>
+                                                {% if not loop.first %}
+                                                    <div class="col-sm-1">
+                                                        <button class="btn btn-danger btn-xs remove-input" id="removeOncology[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                            <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-xs addMore" id="addMoreOncology"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="precautions">
+                                    <label>Precautions</label>
+                                    {% if drug.precautions is empty %}
+                                        <div class="row rowBottomHalfBreak">
+                                            <div class="col-xs-3">
+                                                <input name="precaution[0][label]" class="form-control" placeholder="Label" id="precaution-label" type="text">
+                                            </div>
+                                            <div class="col-xs-7">
+                                                <input name="precaution[0][note]" class="form-control" placeholder="Precaution" id="precaution-precaution" type="text">
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {% for precaution in drug.precautions %}
+                                            <div class="row rowBottomHalfBreak">
+                                                <div class="col-xs-3">
+                                                    <input name="precaution[{{ loop.index0 }}][label]" class="form-control" placeholder="Label" id="precaution-label" value="{{ precaution.name }}" type="text">
+                                                </div>
+                                                <div class="col-xs-7">
+                                                    <input name="precaution[{{ loop.index0 }}][note]" class="form-control" placeholder="Precaution" id="precaution-precaution" value="{{ precaution.note }}" type="text">
+                                                </div>
+                                                {% if not loop.first %}
+                                                    <div class="col-sm-1">
+                                                        <button class="btn btn-danger btn-xs remove-input" id="removePrecaution[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                            <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-xs addMore" id="addMorePrecautions"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="breastfeeding">
+                                    <label for="breastfeeding">Breastfeeding</label>
+                                    <input name="breastfeeding" class="form-control" placeholder="e.g. Not Recommended" id="breastfeeding" value="{{ drug.breastfeeding }}" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="fertility">
+                                    <label for="fertility">Fertility</label>
+                                    <input name="fertility" class="form-control" placeholder="e.g. Not Recommended" id="fertility" value="{{ drug.fertility }}" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {# Look into this one #}
+                                <div class="metabolism">
+                                    <label for="metabolism">Metabolism</label>
+                                    <input name="metabolism" class="form-control" placeholder="e.g. Hepatic" id="metabolism" value="{{ drug.metabolism }}" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {# Look into this one #}
+                                <div class="oraldose">
+                                    <label for="oraldose">Usual Oral Dose</label>
+                                    <input name="uo_dose" class="form-control" placeholder="e.g. 200-400 mg/day" id="oraldose" value="{{ drug.uo_dose }}" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pregnancy">
+                                    <label for="pregnancy">Pregnancy</label>
+                                    <input name="pregnancy" class="form-control" placeholder="e.g. Category : X" id="available" value="{{ drug.pregnancy }}" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="excretion">
+                                    <label for="excretion">Excretion</label>
+                                    <input name="excretion" class="form-control" placeholder="e.g. Renal/Fecal" id="excretion" value="{{ drug.excretion }}" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="available">
+                                    <label for="available">Available</label>
+                                    <input name="available" class="form-control" placeholder="e.g. Tablets: 2.5, 5, 10" id="available" value="{{ drug.available }}" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="administration">
+                                    <label for="administration">Administration</label>
+                                    {% if drug.administration is empty %}
+                                        <div class="row rowBottomHalfBreak">
+                                            <div class="col-sm-10">
+                                                <input name="administration[0]" class="form-control" placeholder="e.g. Oral with food" id="administration" type="text">
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {% for administer in drug.administration %}
+                                            <div class="row rowBottomHalfBreak">
+                                                <div class="col-sm-10">
+                                                    <input name="administration[{{ loop.index0 }}]" class="form-control" placeholder="e.g. Oral with food" id="administration" value="{{ administer }}" type="text">
+                                                </div>
+                                                {% if not loop.first %}
+                                                    <div class="col-sm-1">
+                                                        <button class="btn btn-danger btn-xs remove-input" id="removeAdministration[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                            <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-xs addMore" id="addMoreAdministration"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="monitoring">
+                                    <label for="monitoring">Monitoring</label>
+                                    {% if drug.monitoring is empty %}
+                                        <div class="row rowBottomHalfBreak">
+                                            <div class="col-sm-10">
+                                                <input name="monitoring[0]" class="form-control" placeholder="e.g. Disease progression and toxicities " id="monitoring" type="text">
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {% for monitor in drug.monitoring %}
+                                            <div class="row rowBottomHalfBreak">
+                                                <div class="col-sm-10">
+                                                    <input name="monitoring[{{ loop.index0 }}]" class="form-control" placeholder="e.g. Disease progression and toxicities " id="monitoring" value="{{ monitor }}" type="text">
+                                                </div>
+                                                {% if not loop.first %}
+                                                    <div class="col-sm-1">
+                                                        <button class="btn btn-danger btn-xs remove-input" id="removeMonitoring[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                            <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-xs addMore" id="addMoreMonitoring"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="sideeffect-header" data-parent="#accordion" href="#collapseTwo">
+                            <h4 class="panel-title">
+                                Side Effects
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="frequency">
+                                    <label for="frequency">Frequency</label>
+                                    <input name="sideeffect_frequency" value="{{ drug.frequency }}" class="form-control" placeholder="e.g. Clinically significant" id="frequency" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="effects">
+                                    <label>Side Effects</label>
+                                    {% if drug.sideEffects is empty %}
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <input name="sideeffect[0][name]" class="form-control" placeholder="e.g. Hypertension" type="text">
+                                            </div>
+                                            <div class="col-sm-2 checkbox">
+                                                <label><input name="sideeffect[0][severe]" type="checkbox" id="important" value="important"> Important</label>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {% for sideEffect in drug.sideEffects %}
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <input name="sideeffect[{{ loop.index0 }}][name]"class="form-control" placeholder="e.g. Hypertension" value="{{ sideEffect.name }}" type="text">
+                                                </div>
+                                                <div class="col-sm-2 checkbox">
+                                                    <label><input name="sideeffect[{{ loop.index0 }}][severe]" type="checkbox" id="important" value="important" {% if sideEffect.severe %}checked="checked"{% endif %}> Important</label>
+                                                </div>
+                                                {% if not loop.first %}
+                                                    <div class="col-sm-1">
+                                                        <button class="btn btn-danger btn-xs remove-input" id="removeSideeffects[{{ loop.index0 }}]" onclick="removeRow(this);" type="button" id="addMoreSideeffects">
+                                                            <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-xs addMore" id="addMoreSideeffects"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="interaction-header" data-parent="#accordion" href="#collapseThree">
+                            <h4 class="panel-title">
+                                Drug Interactions
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label>Interactions</label>
+                                {% if interactions is empty %}
+                                    <div class="row rowBottomHalfBreak toClone">
+                                        <div class="row rowBottomHalfBreak col-sm-12">
+                                            <div class="col-sm-4">
+                                                <select name="interact[0][type]" class="form-control col-sm-3" style="font-weight:bold;">
+                                                    <option></option>
+                                                    <option value="Avoid concomitant use">Avoid concomitant use</option>
+                                                    <option value="Increases effect of drug">&uarr; Effect (this drug)</option>
+                                                    <option value="Decreases effect of drug">&darr; Effect (this drug)</option>
+                                                    <option value="Increases/Decreases effect of drug">&uarr;&darr; Effect (this drug)</option>
+                                                    <option value="Decreases effect of">&uarr; Effect</option>
+                                                    <option value="Increases effect of">&darr; Effect</option>
+                                                    <option value="Increases/Decreases effect of">&uarr;&darr; Effect</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row rowBottomHalfBreak col-sm-12">
+                                            <div class="col-sm-4">
+                                                <input name="interact[0][name]" class="form-control" placeholder="e.g. Avoid estrogen" type="text">
+                                            </div>
+                                            <div class="text-center or-text col-sm-1">
+                                                <strong>OR</strong>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <select name="interact[0][enzyme]" class="form-control">
+                                                    <option></option>
+                                                    {% for enzyme in enzymes %}
+                                                        <option>{{ enzyme.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <select name="interact[0][enzymetype]" class="form-control">
+                                                    <option></option>
+                                                    <option>Inhibitor</option>
+                                                    <option>Inducer</option>
+                                                    <option>Substrate</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {% for inter in interactions %}
+                                        <div class="row rowBottomHalfBreak toClone">
+                                            <div class="row rowBottomHalfBreak col-sm-12">
+                                                <div class="col-sm-4">
+                                                    <select name="interact[{{ loop.index0 }}][type]" class="form-control col-sm-3" style="font-weight:bold;">
+                                                        <option></option>
+                                                        <option value="Avoid concomitant use" {% if inter.interaction == "Avoid concomitant use" %}selected="selected"{% endif %}>Avoid concomitant use</option>
+                                                        <option value="Increases effect of {{ drug.g_name|lower }}" {% if inter.interaction == "Increases effect of "~drug.g_name|lower %}selected="selected"{% endif %}>&uarr; Effect (this drug)</option>
+                                                        <option value="Decreases effect of {{ drug.g_name|lower }}" {% if inter.interaction == "Decreases effect of "~drug.g_name|lower %}selected="selected"{% endif %}>&darr; Effect (this drug)</option>
+                                                        <option value="Increases/Decreases effect of {{ drug.g_name|lower }}" {% if inter.interaction == "Increases/Decreases effect of "~drug.g_name|lower %}selected="selected"{% endif %}>&uarr;&darr; Effect (this drug)</option>
+                                                        <option value="Decreases effect of" {% if inter.interaction == "Decreases effect of" %}selected="selected"{% endif %}>&uarr; Effect</option>
+                                                        <option value="Increases effect of" {% if inter.interaction == "Increases effect of" %}selected="selected"{% endif %}>&darr; Effect</option>
+                                                        <option value="Increases/Decreases effect of" {% if inter.interaction == "Increases/Decreases effect of" %}selected="selected"{% endif %}>&uarr;&darr; Effect</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row rowBottomHalfBreak col-sm-12">
+                                                <div class="col-sm-4">
+                                                    <input name="interact[{{ loop.index0 }}][name]" class="form-control" placeholder="e.g. Avoid estrogen" value="{% if inter.enzyme_effect_type is not defined %}{{ inter.compound }}{% endif %}" type="text">
+                                                </div>
+                                                <div class="text-center or-text col-sm-1">
+                                                    <strong>OR</strong>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <select name="interact[{{ loop.index0 }}][enzyme]" class="form-control">
+                                                        <option></option>
+                                                        {% for enzyme in enzymes %}
+                                                            <option {% if inter.compound == enzyme.name %}selected="selected"{% endif %}>{{ enzyme.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <select name="interact[{{ loop.index0 }}][enzymetype]" class="form-control">
+                                                        <option></option>
+                                                        <option {% if inter.enzyme_effect_type is defined and inter.enzyme_effect_type == "Inhibitor" %}selected="selected"{% endif %}>Inhibitor</option>
+                                                        <option {% if inter.enzyme_effect_type is defined and inter.enzyme_effect_type == "Inducer" %}selected="selected"{% endif %}>Inducer</option>
+                                                        <option {% if inter.enzyme_effect_type is defined and inter.enzyme_effect_type == "Substrate" %}selected="selected"{% endif %}>Substrate</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            {% if not loop.first %}
+                                                <div class="col-sm-1"><button class="btn btn-danger btn-xs remove-input" id="removeInteractions[{{ loop.index0 }}]" onclick="removeRow(this);" type="button"><span class="glyphicon glyphicon-minus-sign"></span> Remove</button></div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <button type="button" class="btn btn-success btn-xs addMore" id="addMoreInteractions"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                            </div>
+                            <div class="form-group">
+                                <label>QT-prolonging Agents</label>
+                                {% if qtprolonging is empty %}
+                                    <div class="row rowBottomHalfBreak">
+                                        <div class="col-sm-4">
+                                            <select name="interactQT[0][type]" class="form-control col-sm-3" style="font-weight:bold;">
+                                                <option></option>
+                                                <option value="Avoid concomitant use">Avoid concomitant use</option>
+                                                <option value="Increases effect of drug">&uarr; Effect (this drug)</option>
+                                                <option value="Decreases effect of drug">&darr; Effect (this drug)</option>
+                                                <option value="Increases/Decreases effect of drug">&uarr;&darr; Effect (this drug)</option>
+                                                <option value="Decreases effect of">&uarr; Effect</option>
+                                                <option value="Increases effect of">&darr; Effect</option>
+                                                <option value="Increases/Decreases effect of">&uarr;&darr; Effect</option>
+                                                <option value="Other effects">Other Effects</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {% for qt in qtprolonging %}
+                                        <div class="row rowBottomHalfBreak">
+                                            <div class="col-sm-4">
+                                                <select name="interactQT[{{ loop.index0 }}][type]" class="form-control col-sm-3" style="font-weight:bold;">
+                                                    <option></option>
+                                                    <option value="Avoid concomitant use" {% if qt == "Avoid concomitant use" %}selected="selected"{% endif %}>Avoid concomitant use</option>
+                                                    <option value="Increases effect of drug" {% if qt == "Increases effect of drug" %}selected="selected"{% endif %}>&uarr; Effect (this drug)</option>
+                                                    <option value="Decreases effect of drug" {% if qt == "Decreases effect of drug" %}selected="selected"{% endif %}>&darr; Effect (this drug)</option>
+                                                    <option value="Increases/Decreases effect of drug" {% if qt == "Increases/Decreases effect of drug" %}selected="selected"{% endif %}>&uarr;&darr; Effect (this drug)</option>
+                                                    <option value="Decreases effect of" {% if qt == "Decreases effect of" %}selected="selected"{% endif %}>&uarr; Effect</option>
+                                                    <option value="Increases effect of" {% if qt == "Increases effect of" %}selected="selected"{% endif %}>&darr; Effect</option>
+                                                    <option value="Increases/Decreases effect of" {% if qt == "Increases/Decreases effect of" %}selected="selected"{% endif %}>&uarr;&darr; Effect</option>
+                                                    <option value="Other effects" {% if qt == "Other effects" %}selected="selected"{% endif %}>Other Effects</option>
+                                                </select>
+                                            </div>
+                                            {% if not loop.first %}
+                                                <div class="col-sm-1"><button class="btn btn-danger btn-xs remove-input" id="removeQTProlonging[{{ loop.index0 }}]" onclick="removeRow(this);" type="button"><span class="glyphicon glyphicon-minus-sign"></span> Remove</button></div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <button id="addMoreQTProlonging" type="button" class="btn btn-success btn-xs addMore"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                            </div>
+                            <div class="form-group">
+                                <label><input name="anti-neoplastic" type="checkbox" id="cautionwith" value="cautionwith" {% if drug.anti_neoplastic %}checked="checked"{% endif %}> Caution with other anti-neoplastic agents (unless per protocol)</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Other Effects</label>
+                                {% if othereffects is empty %}
+                                    <div class="row rowBottomHalfBreak">
+                                        <div class="col-sm-10">
+                                            <input name="interact_other[0]" class="form-control" placeholder="e.g. Caution with agents" id="othereffects" type="text">
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {% for effect in othereffects %}
+                                        <div class="row rowBottomHalfBreak">
+                                            <div class="col-sm-10">
+                                                <input name="interact_other[{{ loop.index0 }}]" class="form-control" placeholder="e.g. Caution with agents" value="{{ effect }}" id="othereffects" type="text">
+                                            </div>
+                                            {% if not loop.first %}
+                                                <div class="col-sm-1"><button class="btn btn-danger btn-xs remove-input" id="removeOtherInteractions[{{ loop.index0 }}]" onclick="removeRow(this);" type="button"><span class="glyphicon glyphicon-minus-sign"></span> Remove</button></div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <button type="button" class="btn btn-success btn-xs addMore" id="addMoreOtherInteractions"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" name="dose-header" data-parent="#accordion" href="#collapseFour">
+                            <h4 class="panel-title">
+                                Dose Adjustments
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                {% for doseAdjust in drug.doseAdjusts %}
+                                    <div class="row rowBottomBreak">
+                                        <div class="col-sm-2">
+                                            <label for="adjustmentname">Name</label>
+                                            <input name="adjustment[{{ loop.index0 }}][name]" type="text" class="form-control" id="adjustmentname" value="{{ doseAdjust.problem }}" placeholder="Name">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label for="adjustmentdesc">Adjustment</label>
+                                            <textarea name="adjustment[{{ loop.index0 }}][adjustment]" class="form-control" style="resize:vertical;" rows="3" id="adjustmentdesc">{{ doseAdjust.note }}</textarea>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="chartimage">Adjustment Chart</label>
+                                            <input name="adjustment[{{ loop.index0 }}][chart]" type="file" id="chartimage">
+                                            <div style="margin-top:10px;">{% if doseAdjust %}<a href="/{{ doseAdjust.chart }}" target="_blank">Click to view chart</a>{% else %}<em>No chart</em>{% endif %}</div>
+                                        </div>
+                                        {% if not loop.first %}
+                                            <div class="col-sm-1">
+                                                <button class="btn btn-danger btn-xs remove-input" id="removeDoseAdjustment[{{ loop.index0 }}]" onclick="removeRow(this);" type="button">
+                                                    <span class="glyphicon glyphicon-minus-sign"></span> Remove
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                <button type="button" class="btn btn-success btn-xs addMore" id="addMoreDoseAdjustments"><span class="glyphicon glyphicon-plus-sign"></span> Add More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

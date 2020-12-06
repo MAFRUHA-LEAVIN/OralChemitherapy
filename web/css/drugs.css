@@ -1,0 +1,21 @@
+/**
+ * Styles for Pages: /console
+ *                   /console/drugs/add
+ *                   /console/drugs/NAMEOFDRUG
+ *
+ * Provides page specific styles for 
+ * console page and specific drugs page
+ **/
+
+/* Global Styles to both pages */
+
+
+/* Styles for Console page */
+.add-drug-button {
+    margin-right:16px;
+}
+
+/* Styles for Drugs Add/Edit page */
+.or-text {
+    padding-top:6px;
+}

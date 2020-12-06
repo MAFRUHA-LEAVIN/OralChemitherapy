@@ -1,0 +1,90 @@
+{% extends "base/base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block pageTitle %}
+Oral Chemotherapy - University of Alberta | Improving drug dosing and use
+{% endblock pageTitle %}
+
+{% block pageStylesheets %}
+<link href="/css/live_global.css" rel="stylesheet">
+<link href="/css/live_doseadjust.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block doseAdjustActive %}
+class="active"
+{% endblock doseAdjustActive %}
+
+{% block content %}
+<div ng-controller="LiveViewController">
+    <h1 class="page-header">Dose Adjustments</h1>
+
+    <div class="row controls">
+        <div class="col-xs-4">
+            <input type="text" class="form-control" placeholder="Search..." ng-model="doseAdjustSearch">
+        </div>
+    </div>
+
+        {# Note: This needs to be switched out for Fuel UX Table that sorts and filters out of the box #}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <tr>
+                <th class="col-md-3">Drug</th>
+                <th class="col-md-3">Problem</th>
+            </tr>
+            <tr style="cursor: pointer;" href="{% verbatim %}{{ doseAdjust.chart }}{% endverbatim %}" onclick="clickScript(this);"
+                ng-repeat="doseAdjust in doseAdjusts | filter:doseAdjustSearch | orderBy:'name'">
+                <td class="col-md-3">
+                    {% verbatim %}{{ doseAdjust.name }}{% endverbatim %}
+                </td>
+                <td class="col-md-3">
+                    {% verbatim %}{{ doseAdjust.problem }}{% endverbatim %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="img-dialog">
+        <img></img>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{# Simple AngularJS for Searching Users #}
+{% block pageScripts %}
+<script>
+// Setup of Antic App
+    var anticApp = angular.module('anticApp', []);
+
+// User Controller for User Filtering
+    anticApp.controller('LiveViewController', ['$scope', function($scope) {
+            $scope.doseAdjusts = [
+    {% for doseAdjust in doseAdjusts %}
+                {'name': "{{ doseAdjust.name }}", 'problem': "{{ doseAdjust.problem }}", 'chart': "{{ doseAdjust.chart }}"},
+    {% endfor %}
+            ];
+        }]);
+    $(function() {
+        $("#img-dialog").dialog({
+            autoOpen: false,
+            height:'auto', 
+            width:'auto',
+            position: 'top'
+
+        });
+    });
+    function clickScript(obj)
+    {
+        $src = obj.getAttribute("href");
+        console.log($src);
+        $dialog = $("#img-dialog");
+        $dialog.find("img").first().attr("src",$src);
+        $dialog.dialog("open");
+        
+        
+    }
+
+</script>
+{% endblock pageScripts %}

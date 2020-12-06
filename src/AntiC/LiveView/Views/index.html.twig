@@ -1,0 +1,41 @@
+{% extends "base/base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block pageTitle %}
+Oral Chemotherapy - University of Alberta | Improving drug dosing and use
+{% endblock pageTitle %}
+
+{% block pageStylesheets %}
+<link href="/css/live_global.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+
+{% block homeActive %}
+class="active"
+{% endblock homeActive %}
+
+{% block content %}
+<h1 class="page-header">Introduction</h1>
+<div style="color:#555659">
+    These days there are increasingly more <a title="Oral Chemotherapeutic Agents" href="/drugs">chemotherapeutic options available in the oral form </a>and it is expected this trend will continue.  While oral chemotherapy has many advantages over the traditional regimens, there are also disadvantages associated with its use.</p>
+<p>The use of chemotherapy outside of a hospital environment can lead to patients taking their medications incorrectly, either deliberately or inadvertently, resulting in toxicities or inadequate therapy.</p>
+<p>Problems may also arise when a patient presents to the emergency room.  The attending staff is expected to assess the patient’s medication history and prescribe accordingly.  Chemotherapy medications may have to be assessed from patient lists or prescription bottles brought with them.  Even in Alberta, where an electronic medication profile is available, misunderstandings can arise, and therapies ordered incorrectly.</p>
+<div style=" background-color:#EFEFEF; padding:25px;">
+    <p><strong>Case 1: Kate</strong></p>
+    <p>Kate is a 47 year-old female with metastatic breast cancer.  She is admitted to the medicine service for pain management.  On admission the attending physician orders her current oral chemotherapy:<em> Capecitabine 1500mg po bid</em></p>
+    <p><strong>Case 2: Bill</strong></p>
+    <p>Bill, a 61 year-old male with esophageal cancer is admitted to the surgery service for assessment of leg pain.  The attending physician writes for his current chemotherapy orders:<em> Capecitabine 1250mg po bid</em></p>
+</div>
+<br>
+<br>
+<blockquote>
+    <p style="text-align: center;">There are problems associated with both orders.  How do the dispensary staff and clinical pharmacists, without oncology experience, determine what these may be?</p>
+</blockquote>
+<p>The purpose of this website is to provide a quick and easy reference to the health care professionals faced with these problems.  The following pages contain basic information about each of the chemotherapeutic agents.  These are intended to be concise (a single page) and in a format which is easy to use.   Common side effects have been listed and those deemed “clinically significant” in bold. However, this determination is somewhat subjective, and you are encouraged to seek further as needed.</p>
+<p>Drug interactions are also listed.  The focus is primarily on common drugs available in Canada, and may not apply universally.  The drug interaction tables were compiled using a number of references, which, frustratingly, do not all agree.  Again, you are encouraged to use other sources of information as needed.  A list of references and resources has also been provided.</p>
+<p>The risk stratification rationale has been defined on a separate page.</p>
+<p>This website started as a medication safety project for a Pharm D rotation.  It was originally meant to be in the form of a small booklet at the desks of the dispensary and clinical pharmacists in our community hospital.  Since then it has grown enormously, so we could share the information with our colleagues.  Many hours have been spent reviewing the literature and painstakingly checking the pages, that work continues, and the website will be updated regularly. This has been a labour of love, with no financial reward anticipated.</p>
+<p>Thank you  and we hope you enjoy your visit.</p>
+</div>
+{% endblock content %}

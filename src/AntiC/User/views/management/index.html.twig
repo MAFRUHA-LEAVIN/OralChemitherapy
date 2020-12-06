@@ -1,0 +1,79 @@
+{% extends "base/authenticated.base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block title %}
+Manage Users
+{% endblock title %}
+
+{% block pageStylesheets %}
+    <link href="/css/global.css" rel="stylesheet">
+    <link href="/css/users.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block usersActive %}
+class="active"
+{% endblock usersActive %}
+
+
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="UserController">
+        <h1 class="page-header">Users</h1>
+        {% if app.session.flashbag.has('success') %}
+            {% for flashMessage in app.session.flashbag.get('success') %}
+                <div class="alert alert-success">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row controls">
+            <div class="col-xs-4">
+                <input type="text" class="form-control" placeholder="Search..." ng-model="userSearch">
+            </div>
+            <div class="pull-right add-users-button">
+                <a href="{{ path('user.add') }}" id="addUser" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span> Add User</a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <tr>
+                    <th class="col-md-4">User Name</th>
+                    <th class="col-md-4">Email</th>
+                    <th class="col-md-4 text-right">Controls</th>
+                </tr>
+                <tr ng-repeat="user in users | filter:userSearch | orderBy:'email'">
+                    <td class="col-md-4">{% verbatim %}{{ user.name }}{% endverbatim %}</td>
+                    <td class="col-md-4">{% verbatim %}{{ user.email }}{% endverbatim %}</td>
+                    <td class="col-md-4 text-right">
+                        <a href="/console/user/{% verbatim %}{{ user.id }}{% endverbatim %}" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
+                        <button class="btn btn-info btn-xs btnDisableUser btnSetWidth" ng-click="user.enabled=0" ng-show="user.enabled" id="userid-{% verbatim %}{{ user.id }}{% endverbatim %}"><span class="glyphicon glyphicon-ok"></span> Enabled</button>
+                        <button class="btn btn-danger btn-xs btnDisableUser btnSetWidth" ng-click="user.enabled=1" ng-show="!user.enabled" id="userid-{% verbatim %}{{ user.id }}{% endverbatim %}"><span class="glyphicon glyphicon-remove"></span> Disabled</button>
+                    </td>
+                </tr>
+                <tr ng-show="users.length == 0">
+                    <td>No Users to Manage.</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{# Simple AngularJS for Searching Users #}
+{% block pageScripts %}
+    <script>
+    // Setup of Antic App
+    var anticApp = angular.module('anticApp',[]);
+
+    // User Controller for User Filtering
+    anticApp.controller('UserController', ['$scope', function ($scope) {
+        $scope.users = [
+        {% for user in users %}
+            { 'name':"{{ user.name }}", 'email':"{{ user.email }}", 'id':{{ user.id }}, 'enabled':{{ user.enabled }} },
+        {% endfor %}
+        ];
+    }]);
+    </script>
+{% endblock pageScripts %}

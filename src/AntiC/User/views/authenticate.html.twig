@@ -1,0 +1,37 @@
+{% extends "base/login.base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block title %}
+Management Login
+{% endblock title %}
+
+{% block pageStylesheets %}
+    <link href="/css/signin.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block header %}
+    <div class="page-header">
+        <img src="/img/logo.png" alt="AntiC Cancer App" class="center-block" style="width:200px;">
+    </div>
+{% endblock header %}
+
+{% block content %}
+    <form action="{{ path('user.login_check') }}" method="POST" role="form" class="form-signin">    
+        {% if app.session.flashbag.has('notice') %}
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-info">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+        {% if error %}
+            <div class="alert alert-danger form-error">
+                {{ error }}
+            </div>
+        {% endif %}
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input class="form-control" placeholder="Email address" required="" autofocus="" type="email" name="_username" value="{{ last_username }}">
+        <input class="form-control" placeholder="Password" required="" name="_password" type="password">
+        <button class="btn btn-lg btn-primary btn-block" name="submit" type="submit">Sign in</button>
+        <a class="btn btn-sm btn-info btn-block" href="{{ path('user.iforgot') }}">I forgot my password</a>
+    </form>
+{% endblock content %}

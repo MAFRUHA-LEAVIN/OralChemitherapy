@@ -1,0 +1,70 @@
+{% extends "base/authenticated.base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block title %}
+Manage Drugs
+{% endblock title %}
+
+{% block pageStylesheets %}
+    <link href="/css/global.css" rel="stylesheet">
+    <link href="/css/drugs.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block drugsActive %}
+class="active"
+{% endblock drugsActive %}
+
+
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="DrugsController">
+        <h1 class="page-header">Oral Chemotherapeutics Drugs</h1>
+
+        <div class="row controls">
+            <div class="col-xs-4">
+                <input type="text" class="form-control" placeholder="Search..." ng-model="drugsSearch">
+            </div>
+            <div class="pull-right add-drug-button">
+                <a href="/console/drugs/add" class="btn btn-primary" id="addDrug"><span class="glyphicon glyphicon-plus-sign"></span> Add Drug</a>
+            </div>
+        </div>
+
+        {# Note: This table will be managed by AngularJS for sorting, as it makes things SUPER fast #}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <tr>
+                    <th class="col-md-3">Common Name</th>
+                    <th class="col-md-3">Trade Name</th>
+                    <th class="col-md-6 text-right">Controls</th>
+                </tr>
+                <tr ng-repeat="drug in drugs | filter:drugsSearch | orderBy:'enabled' | orderBy:'commonName'">
+                    <td class="col-md-3">{% verbatim %}{{ drug.commonName }}{% endverbatim %}</td>
+                    <td class="col-md-3">{% verbatim %}{{ drug.tradeName }}{% endverbatim %}</td>
+                    <td class="col-md-6 text-right">
+                        <a href="/console/drugs/{% verbatim %}{{ drug.id }}{% endverbatim %}" id="{% verbatim %}{{ drug.id }}{% endverbatim %}Edit" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
+                        <button ng-click="drug.enabled=0" id="{% verbatim %}{{ drug.id }}{% endverbatim %}-Show" ng-show="drug.enabled" class="btn btn-info btn-xs btnSetWidth btnShowHideDrug"><span class="glyphicon glyphicon-eye-open"></span> Show</button>
+                        <button ng-click="drug.enabled=1" id="{% verbatim %}{{ drug.id }}{% endverbatim %}-Hide" ng-show="!drug.enabled" class="btn btn-warning btn-xs btnSetWidth btnShowHideDrug"><span class="glyphicon glyphicon-eye-close"></span> Hide</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{# Simple AngularJS for Searching Users #}
+{% block pageScripts %}
+    <script>
+    // Setup of Antic App
+    var anticApp = angular.module('anticApp',[]);
+
+    // User Controller for User Filtering
+    anticApp.controller('DrugsController', ['$scope', function ($scope) {
+        $scope.drugs = [
+        {% for drug in drugs %}
+            { 'tradeName':"{{ drug.tradeName }}", 'commonName':"{{ drug.commonName }}", 'id':"{{ drug.id }}", 'enabled':{{ drug.enabled }} },
+        {% endfor %}
+        ];
+    }]);
+    </script>
+{% endblock pageScripts %}

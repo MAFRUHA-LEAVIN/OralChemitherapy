@@ -1,0 +1,22 @@
+{% extends "base/login.html.twig" %}
+
+{# Head Tag Elements Start #}
+{% block pageTitle %}
+AntiC | {% block title %}{% endblock title %}
+{% endblock pageTitle %}
+
+
+{# Body Tag Elements Start #}
+{% block pageHeader %}
+{% block header %} {% endblock header %}
+{% endblock pageHeader %}
+
+{% block pageContent %}
+    {% block content %}{% endblock content %}
+{% endblock pageContent %}
+
+{% block pageFooter %}
+    <div class="footer">
+	{% block footer %}{% endblock footer %}
+    </div>
+{% endblock pageFooter %}

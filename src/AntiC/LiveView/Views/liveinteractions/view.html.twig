@@ -1,0 +1,106 @@
+{% extends "base/base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block pageTitle %}
+Oral Chemotherapy - University of Alberta | Improving drug dosing and use
+{% endblock pageTitle %}
+
+{% block pageStylesheets %}
+<link href="/css/live_global.css" rel="stylesheet">
+<link href="/css/live_interactions.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block interactionsActive %}
+class="active"
+{% endblock interactionsActive %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="page-header">View - {{ interaction.name }}</h1>
+    <div class="col-sm-4" style="border-right: 1px solid #595959;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>
+                        <div class="col-sm-8">
+                            <h4>Substrate</h4>
+                        </div>
+                        <div class="col-sm-4">
+                            <h4>Effect</h4>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for substrate in interaction.Substrate %}
+                <tr><td>
+                        <div class="col-sm-8">
+                            {{substrate.compound}}
+                        </div>
+                        <div class="col-sm-4">
+                            {{substrate.severity}}
+                        </div>
+                    </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm-4" style="border-right: 1px solid #595959;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>
+                        <div class="col-sm-8">
+                            <h4>Inhibitor</h4>
+                        </div>
+                        <div class="col-sm-4">
+                            <h4>Effect</h4>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inhibitor in interaction.Inhibitor %}
+                <tr><td>
+                        <div class="col-sm-8">
+                            {{inhibitor.compound}}
+                        </div>
+                        <div class="col-sm-4">
+                            {{inhibitor.severity}}
+                        </div>
+                    </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm-4">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>
+                        <div class="col-sm-8">
+                            <h4>Inducer</h4>
+                        </div>
+                        <div class="col-sm-4">
+                            <h4>Effect</h4>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inducer in interaction.Inducer %}
+                <tr><td>
+                        <div class="col-sm-8">
+                            {{inducer.compound}}
+                        </div>
+                        <div class="col-sm-4">
+                            {{inducer.severity}}
+                        </div>
+                    </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

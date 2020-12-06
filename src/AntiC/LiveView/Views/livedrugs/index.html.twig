@@ -1,0 +1,76 @@
+{% extends "base/base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block pageTitle %}
+Oral Chemotherapy - University of Alberta | Improving drug dosing and use
+{% endblock pageTitle %}
+
+{% block pageStylesheets %}
+<link href="/css/live_global.css" rel="stylesheet">
+<link href="/css/drugs.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block drugsActive %}
+class="active"
+{% endblock drugsActive %}
+
+{% block content %}
+<div ng-controller="LiveViewController">
+    <h1 class="page-header">Drugs</h1>
+
+    <div class="row controls">
+        <div class="col-xs-4">
+            <input type="text" class="form-control" placeholder="Search..." ng-model="drugsSearch">
+        </div>
+    </div>
+
+        {# Note: This needs to be switched out for Fuel UX Table that sorts and filters out of the box #}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <tr>
+                <th class="col-md-4">
+            <div class="col-md-4">Name</div>
+            <div class="col-md-4">Risk</div>
+            </th>
+            </tr>
+            <tr style="cursor: pointer;" onclick="clickScript(this);" href="/drugs/{% verbatim %}{{ drug.id }}{% endverbatim %}"
+                ng-repeat="drug in drugs | filter:drugsSearch | filter:{enabled:0} | orderBy:'enabled' | orderBy:'name'">
+
+                <td>
+                    <div class="col-md-4">{% verbatim %}{{ drug.id }}{% endverbatim %} ({% verbatim %}{{ drug.tradeName }}{% endverbatim %})</div>
+                    <div class="col-md-4"> 
+                        <img class="ng-hide" ng-show='drug.risk == "High"' height="30" width="30" src="/img/icon_high.png">
+                        <img class="ng-hide" ng-show='drug.risk == "Moderate"' height="30" width="30" src="/img/icon_moderate.png">
+                        <img class="ng-hide" ng-show='drug.risk == "Low"' height="30" width="30" src="/img/icon_low.png">
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+
+{# Simple AngularJS for Searching Users #}
+{% block pageScripts %}
+<script>
+// Setup of Antic App
+            var anticApp = angular.module('anticApp', []);
+// User Controller for User Filtering
+            anticApp.controller('LiveViewController', ['$scope', function($scope) {
+            $scope.drugs = [
+    {% for drug in drugs %}
+            {'name': "{{ drug.commonName }}",'tradeName': "{{ drug.tradeName }}", 'id': "{{ drug.id }}", 'enabled':{{ drug.enabled }}, 'risk': "{{ drug.risk }}"},
+    {% endfor %}
+            ];
+            }]);
+</script>
+<script>
+    function clickScript(obj)
+    {
+        window.document.location = obj.getAttribute("href");
+    }
+</script>
+{% endblock pageScripts %}

@@ -1,0 +1,67 @@
+{% extends "base/base.html.twig" %}
+
+{# Beginning of Page Header #}
+{% block pageTitle %}
+Oral Chemotherapy - University of Alberta | Improving drug dosing and use
+{% endblock pageTitle %}
+
+{% block pageStylesheets %}
+<link href="/css/live_global.css" rel="stylesheet">
+<link href="/css/interactions.css" rel="stylesheet">
+{% endblock pageStylesheets %}
+
+{# Beginning of Page Content #}
+{% block interactionsActive %}
+class="active"
+{% endblock interactionsActive %}
+
+{% block content %}
+<div ng-controller="LiveViewController">
+    <h1 class="page-header">Interactions</h1>
+
+    <div class="row controls">
+        <div class="col-xs-4">
+            <input type="text" class="form-control" placeholder="Search..." ng-model="interactionsSearch">
+        </div>
+    </div>
+
+        {# Note: This needs to be switched out for Fuel UX Table that sorts and filters out of the box #}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <tr>
+                <th class="col-md-6">Interaction Name</th>
+            </tr>
+            <tr style="cursor: pointer;" onclick="clickScript(this);" href="interactions/{% verbatim %}{{ interaction.id }}{% endverbatim %}"
+                ng-repeat="interaction in interactions | filter:interactionsSearch | filter:{enabled:0} | orderBy:'enabled' | orderBy:'name'">
+                <td class="col-md-6">
+                    {% verbatim %}{{ interaction.name }}{% endverbatim %}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+
+{# Simple AngularJS for Searching Users #}
+{% block pageScripts %}
+<script>
+// Setup of Antic App
+    var anticApp = angular.module('anticApp', []);
+
+// User Controller for User Filtering
+    anticApp.controller('LiveViewController', ['$scope', function($scope) {
+            $scope.interactions = [
+    {% for interaction in interactions %}
+                {'name': "{{ interaction.name }}", 'id': "{{ interaction.id }}", 'enabled':{{ interaction.enabled }}},
+    {% endfor %}
+            ];
+        }]);
+</script>
+<script>
+    function clickScript(obj)
+    {
+        window.document.location = obj.getAttribute("href");
+    }
+</script>
+{% endblock pageScripts %}

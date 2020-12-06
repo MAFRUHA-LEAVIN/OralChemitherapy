@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="anticApp">
+	<head>
+		<title>{% block pageTitle %}{% endblock pageTitle %}</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		{% block pageHead %}{% endblock pageHead %}
+
+
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		{% block pageStylesheets %}{% endblock pageStylesheets %}
+	</head>
+	<body>
+		<div class="container">
+			{% block pageHeader %}{% endblock pageHeader %}
+			{% block pageContent %}{% endblock pageContent %}
+			{% block pageFooter %}{% endblock pageFooter %}
+		</div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+        <script src="/scripts/AddInput.js"></script>
+        <script src="/scripts/jquery.antic.js"></script>
+        {% block pageScripts %}
+        <script>
+            // Setup of Antic App
+            var anticApp = angular.module('anticApp',[]);
+        </script>
+        {% endblock pageScripts %}
+	</body>
+</html>

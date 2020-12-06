@@ -1,0 +1,55 @@
+{% extends "base/authenticated.html.twig" %}
+
+{# Head Tag Elements Start #}
+{% block pageTitle %}
+AntiC | {% block title %}{% endblock title %}
+{% endblock pageTitle %}
+
+
+{# Body Tag Elements Start #}
+{% block pageHeader %}
+<div class="header">
+    <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button data-target="navbar-collapse" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/console" class="navbar-brand">AntiC Management Console</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                <li {% block accountActive %}{% endblock accountActive %}><a href="{{ path('user.account') }}" id="userAccount">Account</a></li>
+                <li><a href="{{ path('user.logout') }}" id="logOut">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock pageHeader %}
+
+{% block pageContent %}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li {% block drugsActive %}{% endblock drugsActive %}><a href="/console" id="drugsList">Drugs</a></li>
+                    <li {% block interactionsActive %}{% endblock interactionsActive %}><a href="/console/interactions" id="interactionsList">Interactions</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}<li {% block usersActive %}{% endblock usersActive %}><a href="{{ path('user.list') }}" id="usersList">User Management</a></li>{% endif %}
+                </ul>
+            </div>
+            {% block content %}{% endblock content %}
+        </div>
+    </div>
+</div>
+{% endblock pageContent %}
+
+{% block pageFooter %}
+<div class="footer">
+    {% block footer %}{% endblock footer %}
+</div>
+{% endblock pageFooter %}

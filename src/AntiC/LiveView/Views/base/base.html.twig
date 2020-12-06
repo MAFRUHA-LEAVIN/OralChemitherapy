@@ -1,0 +1,69 @@
+{% extends "base/html.twig" %}
+
+{# Head Tag Elements Start #}
+{% block pageTitle %}
+AntiC | {% block title %}{% endblock title %}
+{% endblock pageTitle %}
+
+
+{# Body Tag Elements Start #}
+{% block pageHeader %}
+
+<a href="/"><img src="/img/logo_small.png" style="padding-bottom: 10px;"></img></a>
+
+<div class="navbar" role="navigation">
+        <div class="container-fluid navbar-inverse">
+            <div class="navbar-header">
+                <button data-target="navbar-collapse" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li {% block homeActive %}{% endblock homeActive %}><a href="/">Home</a>
+                    </li>
+                    <li {% block drugsActive %}{% endblock drugsActive %}><a href="/drugs">Drugs</a>
+                    </li>
+                    <li {% block interactionsActive %}{% endblock interactionsActive %}><a href="/interactions">Interactions</a>
+                    </li>
+                    <li {% block doseAdjustActive %}{% endblock doseAdjustActive %}><a href="/doseadjust">Dose Adjustments</a>
+                    </li>
+                    <li {% block aboutActive %}{% endblock aboutActive %}><a href="/about">About</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ path('user.login') }}">Admin Console</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock pageHeader %}
+
+{% block pageContent %}
+    <div style="padding-top: 25px; padding-left: 50px; padding-right: 50px; padding-bottom:20px; background-color:#ffffff">
+    {% block content %}{% endblock content %}
+    </div>
+    <div style="padding: 25px; border-top: 5px solid #2A44A1; padding-bottom:20px; background-color:#f2f2f2; ">
+        <strong>Disclaimer</strong>
+        <p>
+            The contents of the AntiC App are intended to assist non-oncology pharmacists &
+            allied health-care professionals to identify problems associated with oral chemotherapy. While there is public access,
+            it must be understood that the information is not intended as medical advice, which should be provided by a clinician,
+            with the health information, necessary to identify the individual’s requirements. The information provided on the AntiC
+            App is intended primarily for use in Canada, and may not apply to other jurisdictions. The authors disclaim any liability,
+            loss, injury or damage incurred as a consequence, directly or indirectly, by the use and or application of any of the
+            contents of the AntiC App.
+        </p>
+
+    </div>
+{% endblock pageContent %}
+
+{% block pageFooter %}
+    <div class="footer">
+	{% block footer %}{% endblock footer %}
+    </div>
+{% endblock pageFooter %}
